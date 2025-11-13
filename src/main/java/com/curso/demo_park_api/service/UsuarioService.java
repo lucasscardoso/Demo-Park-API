@@ -3,6 +3,8 @@ package com.curso.demo_park_api.service;
 import com.curso.demo_park_api.entity.Usuario;
 import com.curso.demo_park_api.repository.UsuarioRepository;
 
+import com.curso.demo_park_api.roles.Roles;
+import com.curso.demo_park_api.web.controller.dto.UsuarioCreateDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +20,12 @@ public class UsuarioService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public Usuario salvar(Usuario usuario) {
-        return usuarioRepository.save(usuario);
+    public Usuario salvar(UsuarioCreateDto dto) {
+        Usuario user = new Usuario();
+        user.setUsername(dto.getUsername());
+        user.setPassword(dto.getPassword());
+        user.setRole(Roles.ROLE_CLIENTE);
+        return usuarioRepository.save(user);
     }
 
     @Transactional(readOnly = true)

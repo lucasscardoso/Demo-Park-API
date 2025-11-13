@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: drive-park
+    environment:
+    
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/drive-park-db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=usuario_db
+      - SPRING_DATASOURCE_PASSWORD=user123
+    depends_on:
+      - db
+    ports:
+      - "8081:8080"
+    networks:
+      - app-network
+
+
+  db:
+    image: mysql:8.0
+    container_name: meu_mysql_8
+    restart: always
+    environment:
+  
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: drive-park-db
+      MYSQL_USER: usuario_db
+      MYSQL_PASSWORD: user123
+    ports:
+      - "3388:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app-network
+
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db_data:
