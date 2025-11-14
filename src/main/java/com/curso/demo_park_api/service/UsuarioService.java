@@ -37,9 +37,15 @@ public class UsuarioService {
     }
 
     @Transactional
-    public Usuario alteraSenha(Long id, String password) {
+    public Usuario alteraSenha(Long id, String password, String newPassword, String confirmPassword) {
+        if(!newPassword.equals(confirmPassword) ){
+            throw new RuntimeException("A nova senha precisa ser igual no campo de confirmação!");
+        }
         Usuario user =  findById(id);
-        user.setPassword(password);
+        if(!user.getPassword().equals(password)){
+            throw new RuntimeException("Houve um erro, a senha atual diferente da digitada.");
+        }
+        user.setPassword(newPassword);
         return user;
     }
 

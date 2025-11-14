@@ -9,6 +9,7 @@ import com.curso.demo_park_api.web.controller.dto.UserSenhaDto;
 import com.curso.demo_park_api.web.controller.dto.UsuarioCreateDto;
 import com.curso.demo_park_api.web.controller.dto.UsuarioResponseDto;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioResponseDto> create(@RequestBody UsuarioCreateDto usuario){
+    public ResponseEntity<UsuarioResponseDto> create(@Valid  @RequestBody UsuarioCreateDto usuario){
         Usuario user = usuarioService.salvar(usuario);
 
         UsuarioResponseDto response = userToResponse.convertCreatUser(user);
@@ -46,8 +47,8 @@ public class UsuarioController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<MessageDto> changePassword(@PathVariable Long id,@RequestBody UserSenhaDto senhaDto){
-        Usuario user = usuarioService.alteraSenha(id,senhaDto.getPassword());
+    public ResponseEntity<MessageDto> changePassword(@PathVariable Long id,@Valid @RequestBody UserSenhaDto senhaDto){
+        Usuario user = usuarioService.alteraSenha(id,senhaDto.getPassword(),senhaDto.getNewPassword(),senhaDto.getConfirmPassword());
         String mensagem = String.format("Senha do usuário %s foi alterada com sucesso!", user.getUsername());
         MessageDto msg = new MessageDto(mensagem);
         return ResponseEntity.ok(msg);

@@ -2,10 +2,7 @@ package com.curso.demo_park_api.entity;
 
 import com.curso.demo_park_api.roles.Roles;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -24,7 +21,7 @@ public class Usuario implements Serializable {
     @Column(name = "username",nullable = false,unique = true,length = 255)
     private String username;
 
-    @Column(name = "password",nullable = false,length = 255)
+    @Column(name = "password",nullable = false,length = 10)
     private String password;
 
     @Enumerated(EnumType.STRING)
