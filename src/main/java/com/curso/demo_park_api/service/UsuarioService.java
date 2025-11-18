@@ -1,5 +1,7 @@
 package com.curso.demo_park_api.service;
 
+import com.curso.demo_park_api.AppExceptions.EntityNotFoundException;
+import com.curso.demo_park_api.AppExceptions.PasswordInvalidException;
 import com.curso.demo_park_api.AppExceptions.UserUniqueViolationException;
 import com.curso.demo_park_api.entity.Usuario;
 import com.curso.demo_park_api.repository.UsuarioRepository;
@@ -39,18 +41,18 @@ public class UsuarioService {
     public Usuario findById(Long id) {
 
         return usuarioRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Usuario não encontrado.")
+                () -> new EntityNotFoundException(String.format("Usuario id = %s não encontrado.",id))
         );
     }
 
     @Transactional
     public Usuario alteraSenha(Long id, String password, String newPassword, String confirmPassword) {
         if(!newPassword.equals(confirmPassword) ){
-            throw new RuntimeException("A nova senha precisa ser igual no campo de confirmação!");
+            throw new PasswordInvalidException("A nova senha e a senha de confirmação são diferentes! por gentileza, digite novamente!");
         }
         Usuario user =  findById(id);
         if(!user.getPassword().equals(password)){
-            throw new RuntimeException("Houve um erro, a senha atual diferente da digitada.");
+            throw new PasswordInvalidException("Houve um erro, a senha atual diferente da digitada.");
         }
         user.setPassword(newPassword);
         return user;

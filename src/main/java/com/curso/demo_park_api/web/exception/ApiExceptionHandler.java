@@ -1,6 +1,8 @@
 package com.curso.demo_park_api.web.exception;
 
+import com.curso.demo_park_api.AppExceptions.PasswordInvalidException;
 import com.curso.demo_park_api.AppExceptions.UserUniqueViolationException;
+import com.curso.demo_park_api.AppExceptions.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -28,6 +30,23 @@ public class ApiExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).
                 contentType(MediaType.APPLICATION_JSON).
                 body(new ErrorMessage(request,HttpStatus.CONFLICT,ex.getMessage()));
+    }
+
+    @ExceptionHandler(PasswordInvalidException.class)
+    public ResponseEntity<ErrorMessage> passwordInvalidException(RuntimeException ex, HttpServletRequest request){
+
+        logger.error("API ERROR - "+ ex);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                contentType(MediaType.APPLICATION_JSON).
+                body(new ErrorMessage(request,HttpStatus.BAD_REQUEST,ex.getMessage()));
+    }
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorMessage> entityNotFoundException(RuntimeException ex, HttpServletRequest request){
+
+        logger.error("API ERROR - "+ ex);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).
+                contentType(MediaType.APPLICATION_JSON).
+                body(new ErrorMessage(request,HttpStatus.NOT_FOUND,ex.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
