@@ -1,9 +1,11 @@
 package com.curso.demo_park_api.web.exception;
 
+import com.curso.demo_park_api.AppExceptions.UserUniqueViolationException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ApiExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(ApiExceptionHandler.class);
+
+    @ExceptionHandler(UserUniqueViolationException.class)
+    public ResponseEntity<ErrorMessage> dataIntegrityViolationException(RuntimeException ex, HttpServletRequest request){
+
+        logger.error("API ERROR - "+ ex);
+        return ResponseEntity.status(HttpStatus.CONFLICT).
+                contentType(MediaType.APPLICATION_JSON).
+                body(new ErrorMessage(request,HttpStatus.CONFLICT,ex.getMessage()));
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessage> methodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletRequest request, BindingResult result){

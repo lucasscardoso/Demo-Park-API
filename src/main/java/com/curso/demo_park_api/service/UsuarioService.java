@@ -1,10 +1,12 @@
 package com.curso.demo_park_api.service;
 
+import com.curso.demo_park_api.AppExceptions.UserUniqueViolationException;
 import com.curso.demo_park_api.entity.Usuario;
 import com.curso.demo_park_api.repository.UsuarioRepository;
 
 import com.curso.demo_park_api.roles.Roles;
 import com.curso.demo_park_api.web.controller.dto.UsuarioCreateDto;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,11 +23,16 @@ public class UsuarioService {
     }
 
     public Usuario salvar(UsuarioCreateDto dto) {
-        Usuario user = new Usuario();
-        user.setUsername(dto.getUsername());
-        user.setPassword(dto.getPassword());
-        user.setRole(Roles.ROLE_CLIENTE);
-        return usuarioRepository.save(user);
+        try{
+            Usuario user = new Usuario();
+            user.setUsername(dto.getUsername());
+            user.setPassword(dto.getPassword());
+            user.setRole(Roles.ROLE_CLIENTE);
+            return usuarioRepository.save(user);
+        }catch (DataIntegrityViolationException ex){
+            throw new UserUniqueViolationException(String.format("Usuario {%s} já cadastrado!", dto.getUsername()));
+        }
+
     }
 
     @Transactional(readOnly = true)
