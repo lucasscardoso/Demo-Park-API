@@ -24,6 +24,11 @@ public class UsuarioCreateDto {
 
     public UsuarioCreateDto(){}
 
+    public UsuarioCreateDto(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
     public String getUsername() {
         return username;
     }

@@ -12,7 +12,8 @@ import java.util.stream.Collectors;
 public class UserToResponse {
 
     public UsuarioResponseDto convertCreatUser(Usuario usuario){
-        UsuarioResponseDto response = new UsuarioResponseDto(usuario.getId(),usuario.getUsername(),usuario.getRole());
+        String roleFormatada = usuario.getRole().name().replace("ROLE_","");
+        UsuarioResponseDto response = new UsuarioResponseDto(usuario.getId(),usuario.getUsername(),roleFormatada);
         return  response;
     }
 
