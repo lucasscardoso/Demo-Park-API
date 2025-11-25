@@ -57,4 +57,10 @@ public class ApiExceptionHandler {
                 contentType(MediaType.APPLICATION_JSON).
                 body(new ErrorMessage(request,HttpStatus.UNPROCESSABLE_ENTITY,"Campo(s) invalidos!",result));
     }
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ErrorMessage> handleRuntimeException(RuntimeException ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro interno."));
+    }
 }
