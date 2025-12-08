@@ -25,13 +25,13 @@ public class UsuarioService {
     }
 
     public Usuario salvar(UsuarioCreateDto dto) {
-        try{
+        try {
             Usuario user = new Usuario();
             user.setUsername(dto.getUsername());
             user.setPassword(dto.getPassword());
             user.setRole(Roles.ROLE_CLIENTE);
             return usuarioRepository.save(user);
-        }catch (DataIntegrityViolationException ex){
+        } catch (DataIntegrityViolationException ex) {
             throw new UserUniqueViolationException(String.format("Usuario {%s} já cadastrado!", dto.getUsername()));
         }
 
@@ -41,17 +41,17 @@ public class UsuarioService {
     public Usuario findById(Long id) {
 
         return usuarioRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException(String.format("Usuario id = %s não encontrado.",id))
+                () -> new EntityNotFoundException(String.format("Usuario id = %s não encontrado.", id))
         );
     }
 
     @Transactional
     public Usuario alteraSenha(Long id, String password, String newPassword, String confirmPassword) {
-        if(!newPassword.equals(confirmPassword) ){
+        if (!newPassword.equals(confirmPassword)) {
             throw new PasswordInvalidException("A nova senha e a senha de confirmação são diferentes! por gentileza, digite novamente!");
         }
-        Usuario user =  findById(id);
-        if(!user.getPassword().equals(password)){
+        Usuario user = findById(id);
+        if (!user.getPassword().equals(password)) {
             throw new PasswordInvalidException("Houve um erro, a senha atual diferente da digitada.");
         }
         user.setPassword(newPassword);
@@ -59,7 +59,7 @@ public class UsuarioService {
     }
 
     public List<Usuario> buscaTodos() {
-        List<Usuario> users =  usuarioRepository.findAll();
+        List<Usuario> users = usuarioRepository.findAll();
         return users;
     }
 

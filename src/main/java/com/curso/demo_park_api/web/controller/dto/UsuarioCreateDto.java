@@ -22,7 +22,8 @@ public class UsuarioCreateDto {
     private String password;
 
 
-    public UsuarioCreateDto(){}
+    public UsuarioCreateDto() {
+    }
 
     public UsuarioCreateDto(String username, String password) {
         this.username = username;

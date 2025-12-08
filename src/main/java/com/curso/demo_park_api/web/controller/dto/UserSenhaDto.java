@@ -27,8 +27,10 @@ public class UserSenhaDto {
     )
     private String confirmPassword;
 
-    public UserSenhaDto(){}
-    public UserSenhaDto(String password,String newPassword,String confirmPassword) {
+    public UserSenhaDto() {
+    }
+
+    public UserSenhaDto(String password, String newPassword, String confirmPassword) {
         this.password = password;
         this.newPassword = newPassword;
         this.confirmPassword = confirmPassword;

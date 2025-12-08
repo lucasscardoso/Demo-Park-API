@@ -31,23 +31,23 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
     private UserToResponse userToResponse;
 
-    public UsuarioController(UsuarioService usuarioService,UserToResponse userToResponse) {
+    public UsuarioController(UsuarioService usuarioService, UserToResponse userToResponse) {
         this.usuarioService = usuarioService;
         this.userToResponse = userToResponse;
 
     }
 
-    @Operation(summary = "Cria um novo usuario",description = "recurso cria um novo usuario",
-                responses = {
-            @ApiResponse(responseCode = "201",description = "Recurso criado com sucesso",
-                    content = @Content(mediaType = "application/json",schema = @Schema(implementation = UsuarioResponseDto.class))),
-            @ApiResponse(responseCode = "409",description = "Usuario/email ja cadastrado no sistema",
-                    content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class))),
-            @ApiResponse(responseCode = "422",description = "Recurso não processado, dados invalidos",
-                    content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class))),
-    })
+    @Operation(summary = "Cria um novo usuario", description = "recurso cria um novo usuario",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Recurso criado com sucesso",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioResponseDto.class))),
+                    @ApiResponse(responseCode = "409", description = "Usuario/email ja cadastrado no sistema",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "422", description = "Recurso não processado, dados invalidos",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+            })
     @PostMapping
-    public ResponseEntity<UsuarioResponseDto> create(@Valid  @RequestBody UsuarioCreateDto usuario){
+    public ResponseEntity<UsuarioResponseDto> create(@Valid @RequestBody UsuarioCreateDto usuario) {
         Usuario user = usuarioService.salvar(usuario);
 
         UsuarioResponseDto response = userToResponse.convertCreatUser(user);
@@ -56,64 +56,67 @@ public class UsuarioController {
     }
 
 
-    @Operation(summary = "Busca Usuario pelo ID",description = "recurso localiza um usuario pelo id",
+    @Operation(summary = "Busca Usuario pelo ID", description = "recurso localiza um usuario pelo id",
             responses = {
-                    @ApiResponse(responseCode = "200",description = "Recurso recuperado com sucesso",
-                            content = @Content(mediaType = "application/json",schema = @Schema(implementation = UsuarioResponseDto.class))),
-                    @ApiResponse(responseCode = "404",description = "Usuario não encontrado/não existe",
-                            content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "200", description = "Recurso recuperado com sucesso",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioResponseDto.class))),
+                    @ApiResponse(responseCode = "404", description = "Usuario não encontrado/não existe",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioResponseDto> getById(@PathVariable Long id){
+    public ResponseEntity<UsuarioResponseDto> getById(@PathVariable Long id) {
         Usuario user = usuarioService.findById(id);
         UsuarioResponseDto response = userToResponse.convertCreatUser(user);
         return ResponseEntity.ok(response);
     }
 
 
-    @Operation(summary = "Alterar senha",description = "recurso altera a senha do usuario",
+    @Operation(summary = "Alterar senha", description = "recurso altera a senha do usuario",
             responses = {
-                    @ApiResponse(responseCode = "200",description = "Senha do usuário foi alterada com sucesso!",
-                            content = @Content(mediaType = "application/json",schema = @Schema(implementation = MessageDto.class))),
-                    @ApiResponse(responseCode = "400",description = "nova senha não confere com a confirmação ou formato da senha invalido",
-                            content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "404",description = "Usuario não localizado/não existe",
-                            content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "200", description = "Senha do usuário foi alterada com sucesso!",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))),
+                    @ApiResponse(responseCode = "400", description = "nova senha não confere com a confirmação ou formato da senha invalido",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "404", description = "Usuario não localizado/não existe",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "422", description = "campos invalidos ou mal formatados",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+
             })
     @PatchMapping("/{id}")
-    public ResponseEntity<MessageDto> changePassword(@PathVariable Long id,@Valid @RequestBody UserSenhaDto senhaDto){
-        Usuario user = usuarioService.alteraSenha(id,senhaDto.getPassword(),senhaDto.getNewPassword(),senhaDto.getConfirmPassword());
+    public ResponseEntity<MessageDto> changePassword(@PathVariable Long id, @Valid @RequestBody UserSenhaDto senhaDto) {
+        Usuario user = usuarioService.alteraSenha(id, senhaDto.getPassword(), senhaDto.getNewPassword(), senhaDto.getConfirmPassword());
         String mensagem = String.format("Senha do usuário %s foi alterada com sucesso!", user.getUsername());
         MessageDto msg = new MessageDto(mensagem);
         return ResponseEntity.ok(msg);
     }
 
 
-    @Operation(summary = "Buscar todos os usuarios",description = "recurso busca todos os usuarios cadastrados.",
+    @Operation(summary = "Buscar todos os usuarios", description = "recurso busca todos os usuarios cadastrados.",
             responses = {
-                    @ApiResponse(responseCode = "200",description = "Busca concluida com sucesso!",
-                            content = @Content(mediaType = "application/json",schema = @Schema(implementation = UsuarioResponseDto.class))),
+                    @ApiResponse(responseCode = "200", description = "Busca concluida com sucesso!",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioResponseDto.class))),
                     @ApiResponse(responseCode = "500", description = "Erro interno do servidor.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorResponse.class)))
             })
     @GetMapping
-    public ResponseEntity<List<UsuarioResponseDto>>  getAll(){
+    public ResponseEntity<List<UsuarioResponseDto>> getAll() {
         List<Usuario> users = usuarioService.buscaTodos();
         List<UsuarioResponseDto> response = userToResponse.convertList(users);
         return ResponseEntity.ok(response);
     }
 
 
-    @Operation(summary = "Deleta Usuario pelo ID",description = "recurso deleta um usuario pelo id",
+    @Operation(summary = "Deleta Usuario pelo ID", description = "recurso deleta um usuario pelo id",
             responses = {
-                    @ApiResponse(responseCode = "200",description = "Recurso deletado com sucesso",
-                            content = @Content(mediaType = "application/json",schema = @Schema(implementation = MessageDto.class))),
-                    @ApiResponse(responseCode = "404",description = "Usuario não encontrado/não existe",
-                            content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "200", description = "Recurso deletado com sucesso",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MessageDto.class))),
+                    @ApiResponse(responseCode = "404", description = "Usuario não encontrado/não existe",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
             })
     @DeleteMapping("/{id}")
-    public ResponseEntity<MessageDto> deleteById(@PathVariable Long id){
+    public ResponseEntity<MessageDto> deleteById(@PathVariable Long id) {
         Usuario user = usuarioService.deletaUsuario(id);
         String mensagem = String.format("Usuario foi deletado com sucesso!");
         MessageDto msg = new MessageDto(mensagem);

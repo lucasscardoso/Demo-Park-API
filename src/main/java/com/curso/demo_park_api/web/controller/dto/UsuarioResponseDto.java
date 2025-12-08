@@ -11,7 +11,9 @@ public class UsuarioResponseDto {
     private String role;
 
 
-    public UsuarioResponseDto(){}
+    public UsuarioResponseDto() {
+    }
+
     public UsuarioResponseDto(Long id, String username, String role) {
         this.id = id;
         this.username = username;
@@ -36,7 +38,7 @@ public class UsuarioResponseDto {
         this.id = id;
     }
 
-//    @JsonIgnore
+    //    @JsonIgnore
     public String getRole() {
         return role;
     }
