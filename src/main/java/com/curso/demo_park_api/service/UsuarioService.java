@@ -9,6 +9,7 @@ import com.curso.demo_park_api.repository.UsuarioRepository;
 import com.curso.demo_park_api.roles.Roles;
 import com.curso.demo_park_api.web.controller.dto.UsuarioCreateDto;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,6 +59,7 @@ public class UsuarioService {
         return user;
     }
 
+    @Transactional(readOnly = true)
     public List<Usuario> buscaTodos() {
         List<Usuario> users = usuarioRepository.findAll();
         return users;
@@ -68,4 +70,18 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);
         return user;
     }
+
+    @Transactional(readOnly = true)
+    public Usuario buscarPorUsername(String username) {
+        return  usuarioRepository.findByUsername(username).orElseThrow(
+                () -> new EntityNotFoundException(String.format("Usuario %s não encontrado.", username)));
+    }
+
+    @Transactional(readOnly = true)
+    public Roles buscarRolePorUsername(String username) {
+        return usuarioRepository.findRoleByUsername(username);
+    }
+
+
+
 }
