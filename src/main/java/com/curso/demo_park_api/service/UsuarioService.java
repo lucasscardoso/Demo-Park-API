@@ -10,6 +10,7 @@ import com.curso.demo_park_api.roles.Roles;
 import com.curso.demo_park_api.web.controller.dto.UsuarioCreateDto;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,16 +21,18 @@ import java.util.List;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Usuario salvar(UsuarioCreateDto dto) {
         try {
             Usuario user = new Usuario();
             user.setUsername(dto.getUsername());
-            user.setPassword(dto.getPassword());
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
             user.setRole(Roles.ROLE_CLIENTE);
             return usuarioRepository.save(user);
         } catch (DataIntegrityViolationException ex) {
@@ -52,10 +55,10 @@ public class UsuarioService {
             throw new PasswordInvalidException("A nova senha e a senha de confirmação são diferentes! por gentileza, digite novamente!");
         }
         Usuario user = findById(id);
-        if (!user.getPassword().equals(password)) {
+        if (passwordEncoder.matches(password, user.getPassword())) {
             throw new PasswordInvalidException("Houve um erro, a senha atual diferente da digitada.");
         }
-        user.setPassword(newPassword);
+        user.setPassword(passwordEncoder.encode(newPassword));
         return user;
     }
 

@@ -20,13 +20,13 @@ import java.util.Date;
 @Log4j
 public class JwtUtils {
 
-    private static final String JWT_BEARER = "Bearer ";
-    private static final String JWT_AUTHORIZATION = "authorization";
-    private static final String SECRET_KEY = "0123456789-0123456789-0123456789";
-    private static final long EXPIRE_DAYS = 0;
-    private static final long EXPIRE_HOURS = 0;
-    private static final long EXPIRE_MINUTES = 2;
-    private static final Logger log = LoggerFactory.getLogger(JwtUtils.class);
+    public static final String JWT_BEARER = "Bearer ";
+    public static final String JWT_AUTHORIZATION = "Authorization";
+    public static final String SECRET_KEY = "0123456789-0123456789-0123456789";
+    public static final long EXPIRE_DAYS = 0;
+    public static final long EXPIRE_HOURS = 0;
+    public static final long EXPIRE_MINUTES = 2;
+    public static final Logger log = LoggerFactory.getLogger(JwtUtils.class);
 
     private JwtUtils() {
     }
@@ -92,4 +92,7 @@ public class JwtUtils {
             return token;
         }
     }
+
+
+
 }
