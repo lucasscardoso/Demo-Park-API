@@ -18,7 +18,7 @@ public class UsuarioCreateDto {
     @Size(min = 6, max = 10, message = "A senha deve ter entre 6 e 10 caracteres.")
     @Pattern(
             regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=])(?=\\S+$).{6,10}$",
-            message = "A senha precisa ter entre 8 a 20 caracteres,deve conter: 1 letra maiúscula, 1 minúscula, 1 número e 1 caractere especial.")
+            message = "A senha precisa ter entre 6 a 10 caracteres,deve conter: 1 letra maiúscula, 1 minúscula, 1 número e 1 caractere especial.")
     private String password;
 
 

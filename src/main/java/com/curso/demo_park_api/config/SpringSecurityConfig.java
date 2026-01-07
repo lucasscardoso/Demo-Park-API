@@ -26,8 +26,10 @@ public class SpringSecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
-                .authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.POST, "api/v1/usuarios").permitAll())
-                .authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.POST, "api/v1/auth").permitAll())
+                .authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.POST, "/api/v1/usuarios").permitAll())
+                .authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.POST, "/api/v1/auth").permitAll()
+                        .anyRequest().authenticated())
+
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class )
                 .build();

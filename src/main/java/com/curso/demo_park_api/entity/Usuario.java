@@ -2,6 +2,11 @@ package com.curso.demo_park_api.entity;
 
 import com.curso.demo_park_api.roles.Roles;
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
 import java.io.Serializable;
@@ -11,6 +16,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "usuarios")
+@EntityListeners(AuditingEntityListener.class)
 public class Usuario implements Serializable {
 
     @Id
@@ -21,22 +27,26 @@ public class Usuario implements Serializable {
     @Column(name = "username",nullable = false,unique = true,length = 255)
     private String username;
 
-    @Column(name = "password",nullable = false,length = 10)
+    @Column(name = "password",nullable = false,length = 255)
     private String password;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role",nullable = false,length = 30)
     private Roles role;
 
+    @CreatedDate
     @Column(name = "data_criacao")
     private LocalDateTime dataCriacao;
 
+    @LastModifiedDate
     @Column(name = "data_modificacao")
     private LocalDateTime dataModificacao;
 
+    @CreatedBy
     @Column(name = "criado_por")
     private String criadoPor;
 
+    @LastModifiedBy
     @Column(name = "modificado_por")
     private String modificadoPor;
 

@@ -29,14 +29,19 @@ public class UsuarioService {
     }
 
     public Usuario salvar(UsuarioCreateDto dto) {
+
+        if (usuarioRepository.findByUsername(dto.getUsername()).isPresent()) {
+            throw new UserUniqueViolationException(String.format("Usuario {%s} já cadastrado!", dto.getUsername()));
+        }
+
+        Usuario user = new Usuario();
+        user.setUsername(dto.getUsername());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        user.setRole(Roles.ROLE_CLIENTE);
         try {
-            Usuario user = new Usuario();
-            user.setUsername(dto.getUsername());
-            user.setPassword(passwordEncoder.encode(dto.getPassword()));
-            user.setRole(Roles.ROLE_CLIENTE);
             return usuarioRepository.save(user);
         } catch (DataIntegrityViolationException ex) {
-            throw new UserUniqueViolationException(String.format("Usuario {%s} já cadastrado!", dto.getUsername()));
+            throw new RuntimeException("Erro interno ao salvar usuário: " + ex.getMessage());
         }
 
     }
@@ -55,7 +60,7 @@ public class UsuarioService {
             throw new PasswordInvalidException("A nova senha e a senha de confirmação são diferentes! por gentileza, digite novamente!");
         }
         Usuario user = findById(id);
-        if (passwordEncoder.matches(password, user.getPassword())) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new PasswordInvalidException("Houve um erro, a senha atual diferente da digitada.");
         }
         user.setPassword(passwordEncoder.encode(newPassword));
