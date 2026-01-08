@@ -21,7 +21,6 @@ public class UsuarioResponseDto {
 
     }
 
-
     public String getUsername() {
         return username;
     }
@@ -38,7 +37,6 @@ public class UsuarioResponseDto {
         this.id = id;
     }
 
-    //    @JsonIgnore
     public String getRole() {
         return role;
     }
@@ -46,22 +44,5 @@ public class UsuarioResponseDto {
     public void setRole(String role) {
         this.role = role;
     }
-
-//    @JsonProperty("role") // Define o nome da chave JSON como "role"
-//    public String getRoleFormatada() {
-//        if (this.role == null) {
-//            return null;
-//        }
-//
-//        String nomeEnum = this.role.name();
-//
-//        // Remove "ROLE_" e converte para minúsculas
-//        if (nomeEnum.startsWith("ROLE_")) {
-//            return nomeEnum.substring(5).toLowerCase();
-//        }
-//
-//        // Retorna o nome em minúsculas (caso não tenha o prefixo)
-//        return nomeEnum.toLowerCase();
-//    }
 
 }
